@@ -1,0 +1,51 @@
+
+.data
+    msg1: .asciiz "\nDigite o primeiro numero: "
+    msg2: .asciiz "\nDigite o segundo numero: "
+    msg3: .asciiz "\nO segundo numero nao pode ser zero!"
+    msg4: .asciiz "\nResultado da divisao: "
+
+.text
+.globl main
+
+main:
+    li $v0, 4
+    la $a0, msg1
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+ler_segundo:
+    li $v0, 4
+    la $a0, msg2
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t1, $v0
+
+    beq $t1, $zero, erro
+    j dividir
+
+erro:
+    li $v0, 4
+    la $a0, msg3
+    syscall
+    j ler_segundo
+
+dividir:
+    div $t0, $t1
+    mflo $t2
+
+    li $v0, 4
+    la $a0, msg4
+    syscall
+
+    li $v0, 1
+    move $a0, $t2
+    syscall
+
+    li $v0, 10
+    syscall
